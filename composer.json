@@ -1,0 +1,21 @@
+{
+    "name": "dewsign/color",
+    "description": "A micro package to convert and alter colors!",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Daniel Crewdson",
+            "email": "daniel.crewdson@dewsign.co.uk"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "php": "^7.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Dewsign\\": "src/"
+        }
+    },
+}
