@@ -1,26 +1,25 @@
 <?php
-​
+
 namespace Dewsign;
-​
+
 use InvalidArgumentException;
-​
 class Color
 {
     /**
      * @var int (0-360), The H-value in HSL
      */
     private $hue;
-​
+
     /**
      * @var int (0-100), The S-value in HSL
      */
     private $saturation;
-​
+
     /**
      * @var int (0-100), The L-value in HSL
      */
     private $lightness;
-​
+
     /**
      * Creates a Color instance.
      *
@@ -36,7 +35,7 @@ class Color
         $this->saturation = $saturation;
         $this->lightness = $lightness;
     }
-​
+
     /**
      * Creates a Color instance based on the given RGB-formatted color.
      *
@@ -48,9 +47,11 @@ class Color
      */
     public static function fromRGB($red, $green, $blue)
     {
-        if ($red < 0 || $red > 255 ||
+        if (
+            $red < 0 || $red > 255 ||
             $green < 0 || $green > 255 ||
-            $blue < 0 || $blue > 255) {
+            $blue < 0 || $blue > 255
+        ) {
             throw new InvalidArgumentException('Values $red, $blue and $green can only be 0 to 255');
         }
         $red /= 255;
@@ -73,11 +74,11 @@ class Color
                 $x = ($blue > $green) ? 360 : 0;
                 $hue = 60 * fmod((($green - $blue) / $delta), 6) + $x;
             }
-​
+
             return new self($hue, $saturation * 100, $lightness * 100);
         }
     }
-​
+
     /**
      * Creates a Color instance based on the given Hexadecimal-formatted color.
      *
@@ -101,10 +102,10 @@ class Color
         } else {
             throw new InvalidArgumentException('Given color does not adhere to hexadecimal format');
         }
-​
+
         return self::fromRGB($rgb['red'], $rgb['green'], $rgb['blue']);
     }
-​
+
     /**
      * Creates a Color instance based on the given HSV-formatted color.
      *
@@ -116,40 +117,54 @@ class Color
      */
     public static function fromHSV($hue, $saturation, $value)
     {
-        if ($hue < 0 || $hue > 360 ||
+        if (
+            $hue < 0 || $hue > 360 ||
             $saturation < 0 || $saturation > 100 ||
-            $value < 0 || $value > 100) {
+            $value < 0 || $value > 100
+        ) {
             throw new InvalidArgumentException('Value $hue can only be 0 to 360, $saturation and $value can only be 0 to 100');
         }
         $hue /= 360;
         $saturation /= 100;
         $value /= 100;
-​
+
         $H = $hue * 6;
         $I = floor($H);
         $F = $H - $I;
-​
+
         $M = $value * (1 - $saturation);
         $N = $value * (1 - $saturation * $F);
         $K = $value * (1 - $saturation * (1 - $F));
-​
+
         switch ($I) {
-            case 0: list($red, $green, $blue) = [$value, $K, $M]; break;
-            case 1: list($red, $green, $blue) = [$N, $value, $M]; break;
-            case 2: list($red, $green, $blue) = [$M, $value, $K]; break;
-            case 3: list($red, $green, $blue) = [$M, $N, $value]; break;
-            case 4: list($red, $green, $blue) = [$K, $M, $value]; break;
+            case 0:
+                list($red, $green, $blue) = [$value, $K, $M];
+                break;
+            case 1:
+                list($red, $green, $blue) = [$N, $value, $M];
+                break;
+            case 2:
+                list($red, $green, $blue) = [$M, $value, $K];
+                break;
+            case 3:
+                list($red, $green, $blue) = [$M, $N, $value];
+                break;
+            case 4:
+                list($red, $green, $blue) = [$K, $M, $value];
+                break;
             case 5:
-            case 6: list($red, $green, $blue) = [$value, $M, $N]; break;
+            case 6:
+                list($red, $green, $blue) = [$value, $M, $N];
+                break;
         }
-​
+
         $red *= 255;
         $green *= 255;
         $blue *= 255;
-​
+
         return self::fromRGB($red, $green, $blue);
     }
-​
+
     /**
      * Creates a Color instance based on the given HSL-formatted color.
      *
@@ -161,15 +176,17 @@ class Color
      */
     public static function fromHSL($hue, $saturation, $lightness)
     {
-        if ($hue < 0 || $hue > 360 ||
+        if (
+            $hue < 0 || $hue > 360 ||
             $saturation < 0 || $saturation > 100 ||
-            $lightness < 0 || $lightness > 100) {
+            $lightness < 0 || $lightness > 100
+        ) {
             throw new InvalidArgumentException('Value $hue can only be 0 to 360, $saturation and $lightness can only be 0 to 100');
         }
-​
+
         return new self($hue, $saturation, $lightness);
     }
-​
+
     /**
      * Alters the color by lightening it with the given percentage.
      *
@@ -184,10 +201,10 @@ class Color
         }
         $amount /= 100;
         $this->lightness += (100 - $this->lightness) * $amount;
-​
+
         return $this;
     }
-​
+
     /**
      * Alters the color by darkening it with the given percentage.
      *
@@ -202,10 +219,10 @@ class Color
         }
         $amount /= 100;
         $this->lightness -= $this->lightness * $amount;
-​
+
         return $this;
     }
-​
+
     /**
      * Alters the color by saturating it with the given percentage.
      *
@@ -220,10 +237,10 @@ class Color
         }
         $amount /= 100;
         $this->saturation += (100 - $this->saturation) * $amount;
-​
+
         return $this;
     }
-​
+
     /**
      * Alters the color by desaturating it with the given percentage.
      *
@@ -238,10 +255,10 @@ class Color
         }
         $amount /= 100;
         $this->saturation -= $this->saturation * $amount;
-​
+
         return $this;
     }
-​
+
     /**
      * Outputs the color using the HSL format.
      *
@@ -255,7 +272,7 @@ class Color
             round($this->lightness),
         ];
     }
-​
+
     /**
      * Outputs the color using the HSL format.
      *
@@ -264,10 +281,10 @@ class Color
     public function toHSLString()
     {
         list($hue, $saturation, $lightness) = $this->toHSL();
-​
+
         return "hsl($hue, $saturation, $lightness)";
     }
-​
+
     /**
      * Outputs the color using the RGB format.
      *
@@ -300,14 +317,14 @@ class Color
         $r = ($r + $m) * 255;
         $g = ($g + $m) * 255;
         $b = ($b + $m) * 255;
-​
+
         return [
             round($r),
             round($g),
             round($b),
         ];
     }
-​
+
     /**
      * Outputs the color using the RGB format.
      *
@@ -316,10 +333,10 @@ class Color
     public function toRGBString()
     {
         list($red, $green, $blue) = $this->toRGB();
-​
+
         return "rgb($red, $green, $blue)";
     }
-​
+
     /**
      * Outputs the color using the HEX format.
      *
@@ -328,10 +345,10 @@ class Color
     public function toHEX()
     {
         list($red, $green, $blue) = $this->toRGB();
-​
+
         return strtoupper(sprintf('#%02x%02x%02x', $red, $green, $blue));
     }
-​
+
     /**
      * Outputs the color using the HEX format.
      *
@@ -341,7 +358,7 @@ class Color
     {
         return $this->toHEX();
     }
-​
+
     /**
      * Outputs the color using the HSV format.
      *
@@ -353,19 +370,19 @@ class Color
         $red /= 255;
         $green /= 255;
         $blue /= 255;
-​
+
         $maxRGB = max($red, $green, $blue);
         $minRGB = min($red, $green, $blue);
         $chroma = $maxRGB - $minRGB;
-​
+
         $value = 100 * $maxRGB;
-​
+
         if ($chroma == 0) {
             return [0, 0, $value];
         }
-​
+
         $saturation = 100 * ($chroma / $maxRGB);
-​
+
         if ($red == $minRGB) {
             $h = 3 - (($green - $blue) / $chroma);
         } elseif ($blue == $minRGB) {
@@ -373,25 +390,25 @@ class Color
         } else {
             $h = 5 - (($blue - $red) / $chroma);
         }
-​
+
         $hue = 60 * $h;
-​
+
         return [
             round($hue),
             round($saturation),
             round($value),
         ];
     }
-​
-     /**
-      * Outputs the color using the HSV format.
-      *
-      * @return string HSV representation of the color using CSS format
-      */
-     public function toHSVString()
-     {
-         list($hue, $saturation, $value) = $this->toHSV();
-​
-         return "hsv($hue, $saturation, $value)";
-     }
+
+    /**
+     * Outputs the color using the HSV format.
+     *
+     * @return string HSV representation of the color using CSS format
+     */
+    public function toHSVString()
+    {
+        list($hue, $saturation, $value) = $this->toHSV();
+
+        return "hsv($hue, $saturation, $value)";
+    }
 }
