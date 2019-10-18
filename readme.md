@@ -1,8 +1,8 @@
 # Color
-Forked from `dewsign/color`, which seems to have vanished from github completley...
 
 <p align="center">
 A micro PHP package to convert and alter colors! 🔥
+Forked from `dewsign/color`, which seems to have vanished from github completley...
 </p>
 
 Contents of this document:
